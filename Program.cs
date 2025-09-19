@@ -33,6 +33,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+app.UseMiddleware<ApiResponseMiddleware>();
 
 // Phần 3: Chạy ứng dụng
 app.Run();
