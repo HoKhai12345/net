@@ -2,15 +2,22 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
-public class User
+
+namespace TransportApi.Models
 {
-    [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string? Id { get; set; }
-    public string? name { get; set; }
-    public string? username { get; set; }
-    public string? password { get; set; }
-    public DateTime EstimatedCompletionTime { get; set; }
-    public DateTime? ActualCompletionTime { get; set; }
-    public List<string> Roles { get; set; } = new List<string>();
+    [BsonIgnoreExtraElements]
+    public class User
+    {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string? Id { get; set; }
+        public string? Name { get; set; }
+        public string? Username { get; set; }
+        public string? Email { get; set; }
+        public string? Password { get; set; }
+        public string? PasswordHash { get; set; }
+
+        // Store role references by ObjectId string
+        public List<string> RoleIds { get; set; } = new List<string>();
+    }
 }

@@ -1,13 +1,14 @@
 using MongoDB.Driver;
-using Microsoft.Extensions.Configuration;
 using TransportApi.Models;
+using Microsoft.Extensions.Configuration;
 
-namespace TransportApi.Context
+namespace TransportApi.Services
 {
-    public class MongoDbContext
+    public class MongoDbService : IMongoDbService
     {
         private readonly IMongoDatabase _database;
-        public MongoDbContext(IConfiguration configuration)
+
+        public MongoDbService(IConfiguration configuration)
         {
             var mongoDbSettings = configuration.GetSection("MongoDbSettings");
             var client = new MongoClient(mongoDbSettings.GetValue<string>("ConnectionString"));
@@ -16,5 +17,6 @@ namespace TransportApi.Context
 
         public IMongoCollection<User> Users => _database.GetCollection<User>("users");
         public IMongoCollection<Role> Roles => _database.GetCollection<Role>("roles");
+        public IMongoCollection<Permission> Permissions => _database.GetCollection<Permission>("permissions");
     }
 }
