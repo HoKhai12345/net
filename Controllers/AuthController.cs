@@ -1,4 +1,5 @@
 ﻿using TransportApi.Models;
+using TransportApi.Dto;
 using TransportApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ namespace TransportApi.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserRegistrationDto userDto)
         {
+            Console.WriteLine("tets");
             // Kiểm tra xem dữ liệu đầu vào có hợp lệ không
             if (!ModelState.IsValid)
             {

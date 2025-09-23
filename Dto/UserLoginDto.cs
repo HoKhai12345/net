@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace TransportApi.Models
+namespace TransportApi.Dto
 {
     public class UserLoginDto
     {

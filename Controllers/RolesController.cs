@@ -34,5 +34,13 @@ namespace TransportApi.Controllers
             var roles = await _roleService.AddRole(role);
             return Ok(new { role = roles });
         }
+
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> UpdateRole([FromBody] RoleDto role, [FromRoute] string id)
+        {
+            Console.WriteLine("id", id, role);
+            var roles = await _roleService.UpdateRole(role, id);
+            return Ok(new { role = roles });
+        }
     }
 }

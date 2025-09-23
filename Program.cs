@@ -11,6 +11,18 @@ using MongoDB.Bson.Serialization.Attributes;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services to the container.
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:4200") // Sửa port của bạn ở đây
+      .AllowAnyHeader()
+      .AllowAnyMethod();
+        });
+});
+
 // Phần 1: Đăng ký tất cả các dịch vụ (Services Configuration)
 // Tất cả dòng code có "builder.Services." đều phải ở đây.
 builder.Services.AddControllers();
@@ -95,6 +107,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddleware<ApiResponseMiddleware>();
+app.UseCors(); // Phải ở đây
 app.MapControllers();
 
 // Phần 3: Chạy ứng dụng

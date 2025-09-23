@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using TransportApi.Models;
+using TransportApi.Dto;
 using System;
 
 namespace TransportApi.Services
@@ -37,11 +38,10 @@ namespace TransportApi.Services
             {
                 Name = userDto.Name,
                 Username = userDto.Username,
-                Email = userDto.Email,
-                Password = userDto.Password
+                Email = userDto.Email
             };
 
-            user.PasswordHash = _passwordHasher.HashPassword(user, user.Password);
+            user.PasswordHash = _passwordHasher.HashPassword(user, userDto.Password);
             // Assign default role from DB (Member)
             var memberRole = await _mongoDbService.Roles.Find(r => r.Name == "Member").FirstOrDefaultAsync();
             Console.WriteLine("Member role: " + (memberRole != null ? memberRole.Name : "null"));

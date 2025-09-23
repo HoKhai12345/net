@@ -6,5 +6,6 @@ namespace TransportApi.Services
     {
         Task<List<Role>> ListRole(int limit);
         Task<Role> AddRole(RoleDto roleDto);
+        Task<Role> UpdateRole(RoleDto roleDto, string id);
     }
 }
