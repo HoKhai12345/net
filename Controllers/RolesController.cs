@@ -27,5 +27,12 @@ namespace TransportApi.Controllers
             return Ok(new { role = roles });
 
         }
+
+        [HttpPost("create")]
+        public async Task<IActionResult> AddRole([FromBody] RoleDto role)
+        {
+            var roles = await _roleService.AddRole(role);
+            return Ok(new { role = roles });
+        }
     }
 }

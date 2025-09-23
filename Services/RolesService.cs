@@ -17,16 +17,17 @@ namespace TransportApi.Services
             _configuration = configuration;
         }
 
-        public async Task<Role> AddRole(string name)
+        public async Task<Role> AddRole(RoleDto roleDto)
         {
-            var existingRole = await _mongoDbService.Roles.Find(r => r.Name == name).FirstOrDefaultAsync();
+            Console.WriteLine("NAME", roleDto.name);
+            var existingRole = await _mongoDbService.Roles.Find(r => r.Name == roleDto.name).FirstOrDefaultAsync();
             if (existingRole != null)
             {
                 return null; // Role already exists
             }
             var role = new Role
             {
-                Name = name
+                Name = roleDto.name
             };
             await _mongoDbService.Roles.InsertOneAsync(role);
             return role;
