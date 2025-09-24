@@ -1,6 +1,7 @@
 using MongoDB.Driver;
 using TransportApi.Models;
 using Microsoft.Extensions.Configuration;
+using TransportApi.Interface;
 
 namespace TransportApi.Services
 {

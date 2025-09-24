@@ -8,6 +8,7 @@ using System.Text;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Attributes;
+using TransportApi.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 

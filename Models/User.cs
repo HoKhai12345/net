@@ -17,6 +17,6 @@ namespace TransportApi.Models
         public string? PasswordHash { get; set; }
 
         // Store role references by ObjectId string
-        public List<string> RoleIds { get; set; } = new List<string>();
+        public string? RoleIds { get; set; }
     }
 }

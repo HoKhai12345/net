@@ -1,7 +1,7 @@
 using MongoDB.Driver;
 using TransportApi.Models;
 
-namespace TransportApi.Services
+namespace TransportApi.Interface
 {
     public interface IMongoDbService
     {

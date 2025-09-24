@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using System.Collections.Generic;
+using static System.Text.Json.JsonSerializer;
+using TransportApi.Interface;
 
 namespace TransportApi.Services
 {
@@ -58,10 +60,10 @@ namespace TransportApi.Services
             var existingRole = await _mongoDbService.Roles
                 .Find(r => r.Id == id)
                 .FirstOrDefaultAsync();
-
-            if (existingRole != null)
+            Console.WriteLine("existingRole: " + Serialize(existingRole));
+            if (existingRole == null)
             {
-                Console.WriteLine("Received registration request for user: ", id);
+                Console.WriteLine("Received registration request for user: " + Serialize(roleDto));
                 return null;
             }
 

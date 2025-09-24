@@ -1,8 +1,11 @@
 ﻿using TransportApi.Models;
+using TransportApi.Dto;
 using TransportApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using System.Text.Json;
+using TransportApi.Interface;
 
 namespace TransportApi.Controllers
 {
@@ -31,6 +34,7 @@ namespace TransportApi.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> AddRole([FromBody] RoleDto role)
         {
+            Console.WriteLine($"Role object: {role.name}");
             var roles = await _roleService.AddRole(role);
             return Ok(new { role = roles });
         }
@@ -38,9 +42,12 @@ namespace TransportApi.Controllers
         [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateRole([FromBody] RoleDto role, [FromRoute] string id)
         {
-            Console.WriteLine("id", id, role);
             var roles = await _roleService.UpdateRole(role, id);
-            return Ok(new { role = roles });
+            Console.WriteLine("id" + JsonSerializer.Serialize(id) + JsonSerializer.Serialize(roles));
+            if (roles != null) {
+                return Ok(new { role = roles });
+            }
+            return BadRequest(new { message = "Update failed due to invalid data or business logic error." });
         }
     }
 }

@@ -4,6 +4,8 @@ using TransportApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using TransportApi.Interface;
+using System.Text.Json;
 
 namespace TransportApi.Controllers
 {
@@ -55,7 +57,7 @@ namespace TransportApi.Controllers
 
             // Sau khi xác thực, tạo JWT Token
             var token = _userService.GenerateJwtToken(user);
-
+            Console.WriteLine("===================: " + JsonSerializer.Serialize(user));
             // Trả về token và thông tin người dùng
             return Ok(new { Token = token, User = user });
         }

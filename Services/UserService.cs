@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using TransportApi.Models;
 using TransportApi.Dto;
+using TransportApi.Interface;
+using System.Text.Json;
 using System;
 
 namespace TransportApi.Services
@@ -47,7 +49,7 @@ namespace TransportApi.Services
             Console.WriteLine("Member role: " + (memberRole != null ? memberRole.Name : "null"));
             if (memberRole != null)
             {
-                user.RoleIds.Add(memberRole.Id);
+                user.RoleIds = memberRole.Id;
             }
             await _mongoDbService.Users.InsertOneAsync(user);
             return user;
@@ -65,6 +67,7 @@ namespace TransportApi.Services
             {
                 return null;
             }
+            Console.WriteLine("Member role: " + JsonSerializer.Serialize(user));
             return user;
         }
 
@@ -82,9 +85,9 @@ namespace TransportApi.Services
             };
 
             // Add roles and permissions as claims
-            if (user.RoleIds != null && user.RoleIds.Count > 0)
+            if (user.RoleIds != null)
             {
-                var roles = _mongoDbService.Roles.Find(r => user.RoleIds.Contains(r.Id)).ToList();
+                var roles = _mongoDbService.Roles.Find(r => user.RoleIds == r.Id).ToList();
                 foreach (var role in roles)
                 {
                     claims.Add(new Claim(ClaimTypes.Role, role.Name));

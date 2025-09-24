@@ -1,7 +1,7 @@
 using TransportApi.Models;
 using TransportApi.Dto;
 
-namespace TransportApi.Services
+namespace TransportApi.Interface
 {
     public interface IUserService
     {
