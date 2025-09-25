@@ -6,6 +6,7 @@ using MongoDB.Driver;
 using System.Collections.Generic;
 using static System.Text.Json.JsonSerializer;
 using TransportApi.Interface;
+using TransportApi.Common;
 
 namespace TransportApi.Services
 {
@@ -36,18 +37,57 @@ namespace TransportApi.Services
             return role;
         }
 
-        public async Task<List<Role>> ListRole(int limit)
+        public async Task<PagedResult<Role>> ListRole(int limit, int page)
         {
             // Check if limit is a valid number to prevent errors
-            if (limit <= 0)
+            if (limit <= 0 || limit == null)
             {
-                return new List<Role>(); // Return an empty list or throw an exception
+                limit = 2;
             }
 
-            // Use .Limit() to specify the number of documents to retrieve
-            var roles = await _mongoDbService.Roles.Find(_ => true).Limit(limit).ToListAsync();
+            if (page <= 1 || page == null) { 
+                page = 1;
+            }
 
-            return roles;
+            int skip = (page - 1) * limit;
+            var filter = Builders<Role>.Filter.Empty;
+
+            long totalCount = await _mongoDbService.Roles.CountDocumentsAsync(filter);
+
+            // Use .Limit() to specify the number of documents to retrieve
+            var roles = await _mongoDbService.Roles.Find(_ => true).Skip(skip).Limit(limit).ToListAsync();
+
+            return new PagedResult<Role>
+            {
+                Items = roles,
+                TotalCount = totalCount,
+                PageSize = limit,
+                PageNumber = page
+            };
+
+            //return roles;
+        }
+
+        public async Task<Role> DeleteRole(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return null;
+            }
+
+            var existingRole = await _mongoDbService.Roles
+                .Find(r => r.Id == id)
+                .FirstOrDefaultAsync();
+            Console.WriteLine("existingRole: " + Serialize(existingRole));
+            if (existingRole == null)
+            {
+                return null;
+            }
+
+            var filter = Builders<Role>.Filter.Eq(r => r.Id, id);
+
+            await _mongoDbService.Roles.DeleteOneAsync(filter);
+            return existingRole;
         }
 
         public async Task<Role> UpdateRole(RoleDto roleDto, string id)

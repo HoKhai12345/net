@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System.Text.Json;
 using TransportApi.Interface;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace TransportApi.Controllers
 {
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class RolesController : ControllerBase
@@ -22,10 +25,11 @@ namespace TransportApi.Controllers
             _configuration = configuration;
         }
 
+        [AllowAnonymous]
         [HttpGet("list")]
-        public async Task<IActionResult> GetList([FromQuery] int limit)
+        public async Task<IActionResult> GetList([FromQuery] int limit, [FromQuery] int page)
         {
-            var roles = await _roleService.ListRole(limit);
+            var roles = await _roleService.ListRole(limit, page);
             Console.WriteLine("Received request for role list", limit, roles);
             return Ok(new { role = roles });
 
@@ -45,6 +49,18 @@ namespace TransportApi.Controllers
             var roles = await _roleService.UpdateRole(role, id);
             Console.WriteLine("id" + JsonSerializer.Serialize(id) + JsonSerializer.Serialize(roles));
             if (roles != null) {
+                return Ok(new { role = roles });
+            }
+            return BadRequest(new { message = "Update failed due to invalid data or business logic error." });
+        }
+
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> DeleteRole([FromRoute] string id)
+        {
+            var roles = await _roleService.DeleteRole(id);
+            Console.WriteLine("id" + JsonSerializer.Serialize(id) + JsonSerializer.Serialize(roles));
+            if (roles != null)
+            {
                 return Ok(new { role = roles });
             }
             return BadRequest(new { message = "Update failed due to invalid data or business logic error." });
