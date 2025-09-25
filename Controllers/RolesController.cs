@@ -25,7 +25,7 @@ namespace TransportApi.Controllers
             _configuration = configuration;
         }
 
-        [AllowAnonymous]
+        //[AllowAnonymous]
         [HttpGet("list")]
         public async Task<IActionResult> GetList([FromQuery] int limit, [FromQuery] int page)
         {
